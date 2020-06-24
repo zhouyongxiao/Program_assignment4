@@ -76,3 +76,6 @@ new_data$activity<-gsub("3",activity[3,2],new_data$activity)
 new_data$activity<-gsub("4",activity[4,2],new_data$activity)
 new_data$activity<-gsub("5",activity[5,2],new_data$activity)
 new_data$activity<-gsub("6",activity[6,2],new_data$activity)
+
+#export the final dataframe
+write.table(new_data,"tidydata.txt",row.names = FALSE)
