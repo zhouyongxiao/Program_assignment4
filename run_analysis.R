@@ -20,13 +20,14 @@ datalab<-rbind(trainlab,testlab)
 setwd("D:/Users/Yongxiao/datasciencecoursera/ProgrammingAssignment4/UCI HAR Dataset")
 feature<-read.table("features.txt")
 
-#add column name
+#add each feature name to column name
 colnames(data)<-feature[,2]
 
 #read activity name
 activity<-read.table("activity_labels.txt")
 
-#add descriptive activity name to label
+#add descriptive activity name to each row of the data
+#replace the acticity number with descriptive word
 datalab<-gsub("1",activity[1,2],datalab)
 datalab<-gsub("2",activity[2,2],datalab)
 datalab<-gsub("3",activity[3,2],datalab)
@@ -38,33 +39,37 @@ datalab_new[1]<-" STANDING"
 datalab_new[10299]<-" WALKING_UPSTAIRS"
 
 
-# add descriptive activity name to data
+# add descriptive activity name as a seperate column to data
 data<-cbind(datalab_new,data)
 
 # subset only mean and std value and the activity label
 sublocation<-grep("[mM]ean|[sS]td",feature$V2)
 subdata<-data[,c(1,sublocation+1)]
 
-# average by subject, add subject information to data
+# average by subject and event 
+
+#add subject information to data
 subdata<-cbind(datasub,subdata)
 datalab<-rbind(trainlab,testlab)
 subdata<-cbind(datalab,subdata)
-
-
-#remove descriptive activity name and calculate mean
+#remove descriptive activity name to make it easier to calculate mean
 subdata_t <-subdata[,-3]
+#use the first row of the data to initiate correct column dimention of subset data 
 new_data<-subdata_t[1,]
+#set two for loops to select only one subject's one event at one time
 for (i in 1:30) {
         for (j in 1:6) {
                 new_data<-rbind(new_data,colMeans(subdata_t[(subdata_t[,2]==i) & (subdata_t[,1]==j),]))
         }
         
 }
+# remove the first row since it is only used to initiate dimention
 new_data<-new_data[-1,]
+#add column name to first and second column
 colnames(new_data)[1]<-"activity"
 colnames(new_data)[2]<-"subject"
 
-#add descriptive activity name to label
+#replace acitivty number with descriptive activity name in subset data
 new_data$activity<-gsub("1",activity[1,2],new_data$activity)
 new_data$activity<-gsub("2",activity[2,2],new_data$activity)
 new_data$activity<-gsub("3",activity[3,2],new_data$activity)
