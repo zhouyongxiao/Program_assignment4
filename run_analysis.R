@@ -1,13 +1,14 @@
 #run_analysis
+library("rstudioapi")   
+setwd(dirname(getActiveDocumentContext()$path))
 # extract training data and labels
-setwd("D:/Users/Yongxiao/datasciencecoursera/ProgrammingAssignment4/UCI HAR Dataset/train")
-train<-read.table("X_train.txt",sep = "")
+
+train<-read.table("../UCI HAR Dataset/train/X_train.txt",sep = "")
 trainsub<-read.table("subject_train.txt")
 trainlab<-read.table("y_train.txt")
 
 # extract test data and labels
-setwd("D:/Users/Yongxiao/datasciencecoursera/ProgrammingAssignment4/UCI HAR Dataset/test")
-test<-read.table("X_test.txt",sep = "")
+test<-read.table("../UCI HAR Dataset/test/X_test.txt",sep = "")
 testsub<-read.table("subject_test.txt")
 testlab<-read.table("y_test.txt")
 
@@ -17,8 +18,8 @@ datasub<-rbind(trainsub,testsub)
 datalab<-rbind(trainlab,testlab)
 
 #read feature name
-setwd("D:/Users/Yongxiao/datasciencecoursera/ProgrammingAssignment4/UCI HAR Dataset")
-feature<-read.table("features.txt")
+
+feature<-read.table("../UCI HAR Dataset/features.txt")
 
 #add each feature name to column name
 colnames(data)<-feature[,2]
