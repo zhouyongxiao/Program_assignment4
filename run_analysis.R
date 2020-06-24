@@ -44,3 +44,30 @@ data<-cbind(datalab_new,data)
 # subset only mean and std value and the activity label
 sublocation<-grep("[mM]ean|[sS]td",feature$V2)
 subdata<-data[,c(1,sublocation+1)]
+
+# average by subject, add subject information to data
+subdata<-cbind(datasub,subdata)
+datalab<-rbind(trainlab,testlab)
+subdata<-cbind(datalab,subdata)
+
+
+#remove descriptive activity name and calculate mean
+subdata_t <-subdata[,-3]
+new_data<-subdata_t[1,]
+for (i in 1:30) {
+        for (j in 1:6) {
+                new_data<-rbind(new_data,colMeans(subdata_t[(subdata_t[,2]==i) & (subdata_t[,1]==j),]))
+        }
+        
+}
+new_data<-new_data[-1,]
+colnames(new_data)[1]<-"activity"
+colnames(new_data)[2]<-"subject"
+
+#add descriptive activity name to label
+new_data$activity<-gsub("1",activity[1,2],new_data$activity)
+new_data$activity<-gsub("2",activity[2,2],new_data$activity)
+new_data$activity<-gsub("3",activity[3,2],new_data$activity)
+new_data$activity<-gsub("4",activity[4,2],new_data$activity)
+new_data$activity<-gsub("5",activity[5,2],new_data$activity)
+new_data$activity<-gsub("6",activity[6,2],new_data$activity)
